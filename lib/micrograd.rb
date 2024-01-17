@@ -13,27 +13,29 @@ module Micrograd
     attr_reader :data
 
     def +(other)
-      Value.new(@data + other.data)
+      Value.new(@data + wrap(other).data)
     end
 
     def -(other)
-      Value.new(@data - other.data)
+      Value.new(@data - wrap(other).data)
     end
 
     def *(other)
-      Value.new(@data * other.data)
-    end
-
-    def *(other)
-      Value.new(@data * other.data)
+      Value.new(@data * wrap(other).data)
     end
 
     def /(other)
-      Value.new(@data / other.data)
+      Value.new(@data / wrap(other).data)
     end
 
     def coerce(other)
       [Value.new(other), self]
+    end
+
+    private
+
+    def wrap(v)
+      v.is_a?(Value) ? v : Value.new(v)
     end
   end
 end

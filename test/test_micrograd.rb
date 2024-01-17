@@ -22,6 +22,22 @@ class TestMicrograd < Minitest::Test
     assert_equal 0.6, quotient.data
   end
 
+  def test_arithmetic_with_numeric_types
+    v1 = Value.new(3.0)
+
+    sum = v1 + 5.0
+    assert_equal 8.0, sum.data
+
+    diff = v1 - 5.0
+    assert_equal -2.0, diff.data
+
+    product = v1 * 5.0
+    assert_equal 15.0, product.data
+
+    quotient = v1 / 5.0
+    assert_equal 0.6, quotient.data
+  end
+
   def test_coercing_numeric_into_values
     v = Value.new(5.0)
 
