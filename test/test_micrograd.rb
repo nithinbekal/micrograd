@@ -3,10 +3,11 @@
 require "test_helper"
 
 class TestMicrograd < Minitest::Test
+  include Micrograd
 
   def test_simple_arithmetic_with_values
-    v1 = Micrograd::Value.new(3.0)
-    v2 = Micrograd::Value.new(5.0)
+    v1 = Value.new(3.0)
+    v2 = Value.new(5.0)
 
     sum = v1 + v2
     assert_equal 8.0, sum.data
@@ -22,7 +23,7 @@ class TestMicrograd < Minitest::Test
   end
 
   def test_coercing_numeric_into_values
-    v = Micrograd::Value.new(5.0)
+    v = Value.new(5.0)
 
     sum = 1 + v
     assert_equal 6.0, sum.data
