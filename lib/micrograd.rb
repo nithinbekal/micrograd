@@ -5,6 +5,10 @@ require_relative "micrograd/version"
 module Micrograd
   class Error < StandardError; end
 
+  def Value(data)
+    Value.new(data)
+  end
+
   class Value
     def initialize(data)
       @data = data
