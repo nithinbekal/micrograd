@@ -24,7 +24,9 @@ module Micrograd
   end
 
   class PowOp < Struct.new(:x, :n)
-    def backward(_anything) = nil # TODO
+    def backward(value)
+      x.grad += n * (x ** (n-1)) * value.grad
+    end
   end
 
   class Value
@@ -57,7 +59,7 @@ module Micrograd
 
     def **(n)
       op = PowOp.new(self, n)
-      Value.new(@data**n)
+      Value.new(@data**n, op: op)
     end
 
     def -@ = Value.new(-self.data)
