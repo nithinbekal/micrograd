@@ -19,7 +19,7 @@ class TestMicrograd < Minitest::Test
     assert_equal 15.0, product.data
 
     quotient = v1 / v2
-    assert_almost_equal 0.6, quotient.data
+    assert_in_epsilon 0.6, quotient.data
   end
 
   def test_arithmetic_with_numeric_types
@@ -35,7 +35,7 @@ class TestMicrograd < Minitest::Test
     assert_equal 15.0, product.data
 
     quotient = v1 / 5.0
-    assert_almost_equal 0.6, quotient.data
+    assert_in_epsilon 0.6, quotient.data
   end
 
   def test_coercing_numeric_into_values
@@ -51,7 +51,7 @@ class TestMicrograd < Minitest::Test
     assert_equal 15.0, product.data
 
     quotient = 6 / v
-    assert_almost_equal 1.2, quotient.data
+    assert_in_epsilon 1.2, quotient.data
   end
 
   def test_backward_for_addition
@@ -76,13 +76,5 @@ class TestMicrograd < Minitest::Test
 
     assert_equal 10.0, x.grad
     assert_equal 6.0, y.grad
-  end
-
-  private
-
-  DELTA = 0.0001
-
-  def assert_almost_equal(expected, actual)
-    assert_in_delta expected, actual, DELTA
   end
 end
