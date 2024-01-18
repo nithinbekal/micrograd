@@ -3,8 +3,6 @@
 require_relative "micrograd/version"
 
 module Micrograd
-  class Error < StandardError; end
-
   class NullOp
     def backward(_anything) = nil
   end
