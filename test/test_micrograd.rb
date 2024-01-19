@@ -78,6 +78,17 @@ class TestMicrograd < Minitest::Test
     assert_equal 6.0, y.grad
   end
 
+  def test_backward_for_tanh
+    x = Value.new(0.8814)
+
+    o = x.tanh
+    o.grad = 1.0
+    o.backward
+
+    assert_in_epsilon o.data, 0.7071
+    assert_in_epsilon x.grad, 0.5
+  end
+
   def test_complex_expression
     a = Value.new(2.0)
     b = Value.new(-3.0)

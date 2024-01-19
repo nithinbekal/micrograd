@@ -25,6 +25,12 @@ module Micrograd
       Value.new(@data * other.data, op: op)
     end
 
+    def tanh
+      n = Math.tanh(self.data)
+      op = TanhOp.new(self)
+      Value.new(n, op: op)
+    end
+
     def **(n)
       op = PowOp.new(self, n)
       Value.new(@data**n, op: op)
