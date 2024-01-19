@@ -77,4 +77,23 @@ class TestMicrograd < Minitest::Test
     assert_equal 10.0, x.grad
     assert_equal 6.0, y.grad
   end
+
+  def test_complex_expression
+    a = Value.new(2.0)
+    b = Value.new(-3.0)
+    c = Value.new(10.0)
+    e = a * b
+    d = e + c
+    f = Value.new(-2.0)
+
+    l = d * f
+
+    l.grad = 1.0
+    l.backward
+
+    assert_in_epsilon f.grad, 4.0
+    assert_in_epsilon c.grad, -2.0
+    assert_in_epsilon a.grad, 6.0
+    assert_in_epsilon b.grad, -4.0
+  end
 end
