@@ -36,7 +36,7 @@ module Micrograd
       Value.new(@data**n, op: op)
     end
 
-    def -@ = Value.new(-self.data)
+    def -@ = self * -1
 
     def -(other) = self + (-wrap(other))
     def /(other) = self * (wrap(other) ** -1)
