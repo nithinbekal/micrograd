@@ -107,4 +107,72 @@ class TestMicrograd < Minitest::Test
     assert_in_epsilon a.grad, 6.0
     assert_in_epsilon b.grad, -4.0
   end
+
+  def test_neuron
+    # Inputs
+    x1 = Value.new(2.0)
+    x2 = Value.new(0.0)
+
+    # Weights
+    w1 = Value.new(-3.0)
+    w2 = Value.new(1.0)
+
+    bias = Value.new(6.881373)
+
+    x1w1 = x1 * w1
+    x2w2 = x2 * w2
+
+    x1w1_x2w2 = x1w1 + x2w2
+    n = x1w1_x2w2 + bias
+
+    # tanh is the squishing function which limits output to the range -1..1
+    output = n.tanh
+    assert_in_epsilon output.data, 0.7071
+
+    output.grad = 1
+    output.backward
+
+    assert_in_epsilon n.grad, 0.5
+
+    assert_in_epsilon x1w1_x2w2.grad, 0.5
+    assert_in_epsilon bias.grad, 0.5
+
+    assert_in_epsilon x1w1.grad, 0.5
+    assert_in_epsilon x2w2.grad, 0.5
+
+    assert_in_epsilon x1.grad, -1.5
+    assert_in_epsilon w1.grad, 1
+
+    assert_in_epsilon x2.grad, 0.5
+    assert_in_epsilon w2.grad, 0
+  end
+
+  def test_value_repeated_in_expression
+    a = Value.new(3.0)
+    b = a + a
+    assert_equal 6.0, b.data
+
+    b.grad = 1.0
+    b.backward
+
+    assert_in_epsilon a.grad, 2.0
+  end
+
+  def test_more_complex_expression_with_repeated_values
+    a = Value.new(-2.0)
+    b = Value.new(3.0)
+
+    d = a * b
+    e = a + b
+    f = d * e
+
+    f.grad = 1.0
+    f.backward
+
+    assert_in_epsilon d.grad, 1.0
+    assert_in_epsilon e.grad, -6.0
+
+    assert_in_epsilon a.grad, -3.0
+    assert_in_epsilon b.grad, -8.0
+  end
 end
