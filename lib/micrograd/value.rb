@@ -41,7 +41,10 @@ module Micrograd
     def -(other) = self + (-wrap(other))
     def /(other) = self * (wrap(other) ** -1)
 
-    def backward
+    def backward = op.backward(self)
+
+    def start_backward
+      self.grad = 1.0
       op.backward(self)
     end
 

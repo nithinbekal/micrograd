@@ -82,8 +82,7 @@ class TestMicrograd < Minitest::Test
     x = Value.new(0.8814)
 
     o = x.tanh
-    o.grad = 1.0
-    o.backward
+    o.start_backward
 
     assert_in_epsilon o.data, 0.7071
     assert_in_epsilon x.grad, 0.5
@@ -99,8 +98,7 @@ class TestMicrograd < Minitest::Test
 
     l = d * f
 
-    l.grad = 1.0
-    l.backward
+    l.start_backward
 
     assert_in_epsilon f.grad, 4.0
     assert_in_epsilon c.grad, -2.0
@@ -152,8 +150,7 @@ class TestMicrograd < Minitest::Test
     b = a + a
     assert_equal 6.0, b.data
 
-    b.grad = 1.0
-    b.backward
+    b.start_backward
 
     assert_in_epsilon a.grad, 2.0
   end
@@ -166,8 +163,7 @@ class TestMicrograd < Minitest::Test
     e = a + b
     f = d * e
 
-    f.grad = 1.0
-    f.backward
+    f.start_backward
 
     assert_in_epsilon d.grad, 1.0
     assert_in_epsilon e.grad, -6.0
