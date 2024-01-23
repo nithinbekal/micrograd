@@ -27,14 +27,15 @@ module Micrograd
 
   class TanhOp < Struct.new(:x)
     def backward(value)
-      x.grad += 1 - value.data**2
+      x.grad += (1 - value.data**2) * value.grad
       x.backward
+    rescue
     end
   end
 
   class PowOp < Struct.new(:x, :n)
     def backward(value)
-      x.grad += n * (x ** (n-1)) * value.grad
+      x.grad += n * (x.data ** (n-1)) * value.grad
 
       x.backward
     end
