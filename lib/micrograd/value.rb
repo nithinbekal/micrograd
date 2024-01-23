@@ -53,6 +53,7 @@ module Micrograd
     end
 
     def inspect = "Value(#{data}, grad: #{grad})"
+    def to_s = inspect
 
     private
 
