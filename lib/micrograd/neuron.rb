@@ -7,9 +7,11 @@ module Micrograd
       @bias = random_value
     end
 
+    attr_reader :weights, :bias
+
     def call(xs)
-      @weights.zip(xs)
-        .sum(@bias) { |w, x| w * x }
+      weights.zip(xs)
+        .sum(bias) { |w, x| w * x }
         .tanh
     end
 
