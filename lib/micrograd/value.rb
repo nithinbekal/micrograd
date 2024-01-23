@@ -8,7 +8,7 @@ module Micrograd
       @op = op
     end
 
-    attr_reader :data
+    attr_reader :data, :op
     attr_accessor :grad
 
     def +(other)
@@ -56,8 +56,6 @@ module Micrograd
     def to_s = inspect
 
     private
-
-    attr_reader :op
 
     def wrap(v)
       v.is_a?(Value) ? v : Value.new(v)
