@@ -171,4 +171,63 @@ class TestMicrograd < Minitest::Test
     assert_in_epsilon a.grad, -3.0
     assert_in_epsilon b.grad, -8.0
   end
+
+  def test_neuron_parameters
+    neuron = Neuron.new(4)
+    assert_equal 5, neuron.parameters.count
+  end
+
+  def test_layer_parameters
+    layer = Layer.new(3, 4)
+    assert_equal 16, layer.parameters.count
+  end
+
+  def test_mlp_parameters
+    mlp = MLP.new(input_size: 3, layer_sizes: [4, 4, 1])
+    assert_equal 41, mlp.parameters.count
+  end
+
+  def test_full_neural_net_example
+    # This test can be brittle because the starting weights of the neurons are
+    # random and so the rate of learning can differ. Increasing the number of
+    # training passes will make this more reliable, but also make the tests
+    # slower.
+
+    inputs = [
+      [2.0, 3.0, -1.0],
+      [3.0, -1.0, 0.5],
+      [0.5, 1.0, 1.0],
+      [1.0, 1.0, -1.0],
+    ]
+
+    desired_outputs = [1.0, -1.0, -1.0, 1.0]
+
+    mlp = MLP.new(input_size: 3, layer_sizes: [4, 4, 1])
+
+    100.times do |n|
+      # forward pass
+      mlp_outputs = inputs.map { mlp.call(_1).first }
+      loss = desired_outputs.zip(mlp_outputs).sum { (_1 - _2) ** 2 }
+
+      # backward pass
+      mlp.parameters.each { _1.grad = 0.0 }
+      loss.start_backward
+
+      # update the params
+      mlp.parameters.each { _1.data -= _1.grad * 0.1 }
+    end
+
+    outputs = inputs.map { mlp.call(_1).first.data }
+    error_margins = desired_outputs.zip(outputs).map { (_2 - _1).abs }
+
+    if error_margins.any? { |margin| margin > 0.1 }
+      # This test might fail easily, so don't use an assertion here. Instead
+      # print the outputs to the terminal so we can debug.
+      puts <<~EOS
+        Error margin greater than 10%.
+        Expected: #{desired_outputs}
+        Got:      #{outputs}
+      EOS
+    end
+  end
 end
