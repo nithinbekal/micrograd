@@ -8,8 +8,8 @@ module Micrograd
       @op = op
     end
 
-    attr_reader :data, :op
-    attr_accessor :grad
+    attr_accessor :data, :grad
+    attr_reader :op
 
     def +(other)
       other = wrap(other)
