@@ -15,6 +15,8 @@ module Micrograd
         .tanh
     end
 
+    def parameters = [*weights, bias]
+
     private
 
     def random_value

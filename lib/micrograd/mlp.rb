@@ -21,5 +21,7 @@ module Micrograd
       @layers.each { |layer| xs = layer.call(xs) }
       xs
     end
+
+    def parameters = layers.flat_map(&:parameters)
   end
 end

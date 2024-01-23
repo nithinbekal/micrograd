@@ -11,5 +11,7 @@ module Micrograd
     def call(xs)
       @neurons.map { |n| n.call(xs) }
     end
+
+    def parameters = neurons.flat_map(&:parameters)
   end
 end
