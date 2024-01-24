@@ -4,7 +4,9 @@ A tiny autograd engine. This is a Ruby implementation of [karpathy/micrograd](ht
 
 ## Installation
 
-TODO
+```
+gem install micrograd
+```
 
 ## Usage
 
